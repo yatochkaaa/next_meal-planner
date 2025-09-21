@@ -1,17 +1,28 @@
 "use client";
 
+import { ThemeToggle } from "@/components/theme-toggle";
+import { AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar } from "@radix-ui/react-avatar";
+import { DropdownMenu, Separator } from "@radix-ui/react-dropdown-menu";
 import {
   Apple,
   Boxes,
   ChevronDown,
   ChevronLeft,
+  LogOut,
   Menu,
   Ruler,
   Utensils,
@@ -121,13 +132,54 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="flex">
-      <Collapsible open={open} onOpenChange={setOpen}>
-        <CollapsibleTrigger asChild>
-          <Button size="icon" variant="outline">
-            <Menu />
-          </Button>
-        </CollapsibleTrigger>
-      </Collapsible>
+      <div className="bg-background fixed z-10 flex h-13 w-screen items-center justify-between border px-2">
+        <Collapsible className="h-full" open={open} onOpenChange={setOpen}>
+          <CollapsibleTrigger className="m-2" asChild>
+            <Button size="icon" variant="outline">
+              <Menu />
+            </Button>
+          </CollapsibleTrigger>
+        </Collapsible>
+
+        <div className="flex">
+          <ThemeToggle />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="flex h-9 items-center gap-2 px-2"
+              >
+                <Avatar className="size-8">
+                  <AvatarFallback>A</AvatarFallback>
+                </Avatar>
+                <span className="hidden md:inline">Admin</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="flex items-center gap-3 px-2 py-1.5">
+                <Avatar className="size-10">
+                  <AvatarFallback>A</AvatarFallback>
+                </Avatar>
+
+                <div>
+                  <p className="text-sm font-medium">Admin</p>
+                  <p className="text-muted-foreground text-xs">
+                    admin@test.com
+                  </p>
+                </div>
+              </div>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem variant="destructive" onClick={() => {}}>
+                <LogOut className="size-4" /> Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
 
       <Collapsible
         className="fixed top-0 left-0 z-20 h-dvh"
