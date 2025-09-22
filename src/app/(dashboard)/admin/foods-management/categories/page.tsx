@@ -1,7 +1,7 @@
+import { CategoryCards } from "@/app/(dashboard)/admin/foods-management/categories/_components/category-cards";
+
 const Page = () => {
-  return <div>Categories Page</div>;
+  return <CategoryCards />;
 };
 
 export default Page;
-
-
