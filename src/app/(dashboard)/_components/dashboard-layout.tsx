@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { customErrorMap } from "@/lib/customErrorMap";
 import { Avatar } from "@radix-ui/react-avatar";
 import { DropdownMenu, Separator } from "@radix-ui/react-dropdown-menu";
 import {
@@ -31,6 +32,9 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
+import z from "zod/v3";
+
+z.setErrorMap(customErrorMap);
 
 interface RouteGroupType {
   group: string;
