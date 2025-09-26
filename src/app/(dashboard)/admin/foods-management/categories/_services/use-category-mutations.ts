@@ -2,9 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createCategory,
   deleteCategoty,
+  updateCategory,
 } from "@/app/(dashboard)/admin/foods-management/categories/_services/categoryMutations";
 import { toast } from "sonner";
-import { CategorySchema } from "../_types/categorySchema";
+import { CategorySchema } from "@/app/(dashboard)/admin/foods-management/categories/_types/categorySchema";
 
 const useDeleteCategory = () => {
   const queryClient = useQueryClient();
@@ -36,7 +37,7 @@ const useUpdateCategory = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: CategorySchema) => await createCategory(data),
+    mutationFn: async (data: CategorySchema) => await updateCategory(data),
     onSuccess: () => {
       toast.success("Category updated successfully");
       queryClient.invalidateQueries({ queryKey: ["categories"] });
