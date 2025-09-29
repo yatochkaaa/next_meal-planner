@@ -1,12 +1,13 @@
 "use client";
 
+import { Edit, Trash } from "lucide-react";
 import { useCategories } from "@/app/(dashboard)/admin/foods-management/categories/_services/use-category-queries";
 import { useDeleteCategory } from "@/app/(dashboard)/admin/foods-management/categories/_services/use-category-mutations";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash } from "lucide-react";
 import { alert } from "@/lib/use-global-store";
-import { useCategoriesStore } from "../_libs/use-category-store";
-import { CategoryCardsSkeleton } from "./category-cards-skeleton";
+import { useCategoriesStore } from "@/app/(dashboard)/admin/foods-management/categories/_libs/use-category-store";
+import { CategoryCardsSkeleton } from "@/app/(dashboard)/admin/foods-management/categories/_components/category-cards-skeleton";
+import { NoItemsFound } from "@/components/no-items-found";
 
 const CategoryCards = () => {
   const categoriesQuery = useCategories();
@@ -18,6 +19,10 @@ const CategoryCards = () => {
     updateSelectedCategoryId(id);
     updateCategoryDialogOpen(true);
   };
+
+  if (categoriesQuery.data?.length === 0) {
+    return <NoItemsFound onClick={() => updateCategoryDialogOpen(true)} />;
+  }
 
   return (
     <div className="grid grid-cols-4 gap-2">
