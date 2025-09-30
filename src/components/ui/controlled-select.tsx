@@ -2,7 +2,7 @@
 
 import { ValueLabel } from "@/lib/types/valueLabel";
 import { Label } from "@/components/ui/label";
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 type SelectProps<T extends FieldValues> = {
-  name: string;
+  name: Path<T>;
   label: string;
   options?: ValueLabel[];
   placeholder?: string;
