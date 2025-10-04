@@ -1,3 +1,4 @@
+"use server";
 import { Prisma } from "$/generated/prisma";
 import {
   foodFilterSchema,
@@ -40,7 +41,7 @@ const getFoods = async (
   const numericMinCalories =
     minCaloriesStr === "" ? undefined : Number(minCaloriesStr);
   const numericMaxCalories =
-    maxCaloriesStr === "" ? undefined : Number(minCaloriesStr);
+    maxCaloriesStr === "" ? undefined : Number(maxCaloriesStr);
 
   if (numericMinCalories !== undefined || numericMaxCalories !== undefined) {
     where.calories = {};
@@ -70,6 +71,7 @@ const getFoods = async (
   }
 
   const skip = (page - 1) * pageSize;
+
   const [total, data] = await Promise.all([
     prisma.food.count({ where }),
     prisma.food.findMany({

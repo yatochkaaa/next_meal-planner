@@ -87,7 +87,7 @@ const FoodFormDialog = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={foodDialogOpen} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2" />
@@ -181,7 +181,7 @@ const FoodFormDialog = () => {
           </FormProvider>
 
           <DialogFooter>
-            <Button type="submit">
+            <Button type="submit" isLoading={isPending}>
               {!!selectedFoodId ? "Edit" : "Create"} Food
             </Button>
           </DialogFooter>

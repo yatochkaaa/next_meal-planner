@@ -18,6 +18,7 @@ const useCreateFood = () => {
       toast.success("Food created successfully.");
       queryClient.invalidateQueries({ queryKey: ["foods"] });
     },
+    throwOnError: true,
   });
 };
 

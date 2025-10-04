@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useMemo } from "react";
 import {
   FormProvider,
@@ -153,7 +154,7 @@ const FoodFiltersDrawer = () => {
               </div>
             </div>
             <DrawerFooter className="pt-2">
-              <DrawerClose>
+              <DrawerClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DrawerClose>
               <Button
