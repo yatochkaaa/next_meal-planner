@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { SignUpSchema } from "@/app/(auth)/sign-up/_types/signUpSchema";
 import { signUp } from "@/app/(auth)/sign-up/_services/sign-up-mutations";
 import { toast } from "sonner";
