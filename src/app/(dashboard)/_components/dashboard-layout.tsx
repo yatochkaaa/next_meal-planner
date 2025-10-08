@@ -33,6 +33,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
 import z from "zod/v3";
+import { Session } from "next-auth";
+import { useSignOut } from "@/app/(auth)/sign-in/_services/use-sign-in-mutations";
+import { Role } from "$/generated/prisma";
 
 z.setErrorMap(customErrorMap);
 
@@ -127,12 +130,27 @@ const RouteGroup = ({ group, items }: RouteGroupProps) => {
   );
 };
 
-interface DashboardLayoutProps {
+type DashboardLayoutProps = {
   children: ReactNode;
-}
+  session: Session;
+};
 
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+const DashboardLayout = ({ children, session }: DashboardLayoutProps) => {
   const [open, setOpen] = useState(false);
+  const signOutMutation = useSignOut();
+  const userRole = session.user.role;
+
+  const filteredRouteGroups = ROUTE_GROUPS.filter((group) => {
+    if (userRole === Role.ADMIN) {
+      return group.group === "Foods Management";
+    } else {
+      return group.group === "Meals Management";
+    }
+  });
+
+  const handleLogout = () => {
+    signOutMutation.mutate();
+  };
 
   return (
     <div className="flex">
@@ -147,41 +165,44 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
         <div className="flex">
           <ThemeToggle />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex h-9 items-center gap-2 px-2"
-              >
-                <Avatar className="size-8">
-                  <AvatarFallback>A</AvatarFallback>
-                </Avatar>
-                <span className="hidden md:inline">Admin</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="flex items-center gap-3 px-2 py-1.5">
-                <Avatar className="size-10">
-                  <AvatarFallback>A</AvatarFallback>
-                </Avatar>
 
-                <div>
-                  <p className="text-sm font-medium">Admin</p>
-                  <p className="text-muted-foreground text-xs">
-                    admin@test.com
-                  </p>
+          {session && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex h-9 items-center gap-2 px-2"
+                >
+                  <Avatar className="size-8">
+                    <AvatarFallback>{session.user.name?.[0]}</AvatarFallback>
+                  </Avatar>
+                  <span className="hidden md:inline">{session.user.name}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <div className="flex items-center gap-3 px-2 py-1.5">
+                  <Avatar className="size-10">
+                    <AvatarFallback>A</AvatarFallback>
+                  </Avatar>
+
+                  <div>
+                    <p className="text-sm font-medium">{session.user.name}</p>
+                    <p className="text-muted-foreground text-xs">
+                      {session.user.email}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <DropdownMenuSeparator />
+                <DropdownMenuSeparator />
 
-              <DropdownMenuItem variant="destructive" onClick={() => {}}>
-                <LogOut className="size-4" /> Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+                  <LogOut className="size-4" /> Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
 
@@ -211,7 +232,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <Separator className="my-2" />
 
             <div className="mt-4">
-              {ROUTE_GROUPS.map((routeGroup) => (
+              {filteredRouteGroups.map((routeGroup) => (
                 <RouteGroup key={routeGroup.group} {...routeGroup} />
               ))}
             </div>
