@@ -201,6 +201,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -218,6 +222,7 @@ const config = {
     "db"
   ],
   "activeProvider": "sqlite",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -226,8 +231,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  name      String\n  email     String   @unique\n  password  String\n  meal      Meal[]\n  role      Role\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel Food {\n  id               Int               @id @default(autoincrement())\n  name             String            @unique\n  calories         Float?\n  protein          Float?\n  fat              Float?\n  carbohydrates    Float?\n  fiber            Float?\n  sugar            Float?\n  category         Category?         @relation(fields: [categoryId], references: [id])\n  categoryId       Int?\n  foodServingUnits FoodServingUnit[]\n  meal             Meal?             @relation(fields: [mealId], references: [id])\n  mealId           Int?\n  mealFood         MealFood[]\n  createdAt        DateTime          @default(now())\n  updatedAt        DateTime          @updatedAt\n}\n\nmodel Category {\n  id        Int      @id @default(autoincrement())\n  name      String   @unique\n  foods     Food[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel ServingUnit {\n  id              Int               @id @default(autoincrement())\n  name            String            @unique\n  foodServingUnit FoodServingUnit[]\n  mealFood        MealFood[]\n  createdAt       DateTime          @default(now())\n  updatedAt       DateTime          @updatedAt\n}\n\nmodel FoodServingUnit {\n  id            Int         @id @default(autoincrement())\n  food          Food        @relation(fields: [foodId], references: [id])\n  foodId        Int\n  servingUnit   ServingUnit @relation(fields: [servingUnitId], references: [id])\n  servingUnitId Int\n  grams         Float?\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n\nmodel Meal {\n  id        Int        @id @default(autoincrement())\n  dateTime  DateTime\n  foods     Food[]\n  user      User       @relation(fields: [userId], references: [id])\n  userId    Int\n  mealFood  MealFood[]\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n}\n\nmodel MealFood {\n  id            Int         @id @default(autoincrement())\n  food          Food        @relation(fields: [foodId], references: [id])\n  foodId        Int\n  meal          Meal        @relation(fields: [mealId], references: [id])\n  mealId        Int\n  servingUnit   ServingUnit @relation(fields: [servingUnitId], references: [id])\n  servingUnitId Int\n  amount        Float\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n",
-  "inlineSchemaHash": "48add83b5bfcbf4c766ab79e8efbff53b5c32bec00b57a8d71b29cb738e76507",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  name      String\n  email     String   @unique\n  password  String\n  meal      Meal[]\n  role      Role\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel Food {\n  id               Int               @id @default(autoincrement())\n  name             String            @unique\n  calories         Float?\n  protein          Float?\n  fat              Float?\n  carbohydrates    Float?\n  fiber            Float?\n  sugar            Float?\n  category         Category?         @relation(fields: [categoryId], references: [id])\n  categoryId       Int?\n  foodServingUnits FoodServingUnit[]\n  meal             Meal?             @relation(fields: [mealId], references: [id])\n  mealId           Int?\n  mealFood         MealFood[]\n  createdAt        DateTime          @default(now())\n  updatedAt        DateTime          @updatedAt\n}\n\nmodel Category {\n  id        Int      @id @default(autoincrement())\n  name      String   @unique\n  foods     Food[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel ServingUnit {\n  id              Int               @id @default(autoincrement())\n  name            String            @unique\n  foodServingUnit FoodServingUnit[]\n  mealFood        MealFood[]\n  createdAt       DateTime          @default(now())\n  updatedAt       DateTime          @updatedAt\n}\n\nmodel FoodServingUnit {\n  id            Int         @id @default(autoincrement())\n  food          Food        @relation(fields: [foodId], references: [id])\n  foodId        Int\n  servingUnit   ServingUnit @relation(fields: [servingUnitId], references: [id])\n  servingUnitId Int\n  grams         Float?\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n\nmodel Meal {\n  id        Int        @id @default(autoincrement())\n  dateTime  DateTime\n  foods     Food[]\n  user      User       @relation(fields: [userId], references: [id])\n  userId    Int\n  mealFood  MealFood[]\n  createdAt DateTime   @default(now())\n  updatedAt DateTime   @updatedAt\n}\n\nmodel MealFood {\n  id            Int         @id @default(autoincrement())\n  food          Food        @relation(fields: [foodId], references: [id])\n  foodId        Int\n  meal          Meal        @relation(fields: [mealId], references: [id])\n  mealId        Int\n  servingUnit   ServingUnit @relation(fields: [servingUnitId], references: [id])\n  servingUnitId Int\n  amount        Float\n  createdAt     DateTime    @default(now())\n  updatedAt     DateTime    @updatedAt\n}\n",
+  "inlineSchemaHash": "9d98c01cdb4d6cbada544af3e7bc92458d9cff123dc7073c448925091dd4f382",
   "copyEngine": true
 }
 
@@ -268,6 +273,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "generated/prisma/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "generated/prisma/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")
